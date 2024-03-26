@@ -15,7 +15,7 @@ def create_new_student(
     database.execute(query)
 
 
-def delete_student(id_student: str):
+def delete_student_by_id(id_student: str):
     query = f"DELETE FROM Student WHERE id_student = '{id_student}'"
     database.execute(query)
 

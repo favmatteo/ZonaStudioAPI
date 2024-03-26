@@ -27,6 +27,9 @@ class Firebase:
     def get_all_users(self):
         return auth.list_users().users
     
+    def get_user_by_id(self, id):
+        return auth.get_user(id)
+
     def get_user_by_email(self, email):
         return auth.get_user_by_email(email)
     
