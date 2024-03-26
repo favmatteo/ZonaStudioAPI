@@ -22,13 +22,19 @@ class Firebase:
             photo_url="http://www.example.com/12345678/photo.png",
             disabled=False,
         )
+        return user
 
     def get_all_users(self):
         return auth.list_users().users
+    
+    def get_user_by_email(self, email):
+        return auth.get_user_by_email(email)
+    
+    def get_user_id_by_email(self, email):
+        return self.get_user_by_email(email).uid
 
-    def delete_user_by_email(self, email):
-        user = auth.get_user_by_email(email)
-        auth.delete_user(user.uid)
+    def delete_user_by_id(self, id):
+        auth.delete_user(id)
 
     def get_app(self):
         return self.app

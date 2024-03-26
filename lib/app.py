@@ -28,6 +28,7 @@ class Database:
 
     def execute(self, query: str):
         self.cursor.execute(query)
+        self.conn.commit()
 
     def get_content(self):
         return self.cursor.fetchall()
@@ -35,8 +36,6 @@ class Database:
     def close(self):
         self.cursor.close()
         self.conn.close()
-
-
 
 
 api = Api()
