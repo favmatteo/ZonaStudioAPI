@@ -26,15 +26,22 @@ class Firebase:
 
     def get_all_users(self):
         return auth.list_users().users
-    
+
     def get_user_by_id(self, id):
         return auth.get_user(id)
 
     def get_user_by_email(self, email):
         return auth.get_user_by_email(email)
-    
+
     def get_user_id_by_email(self, email):
         return self.get_user_by_email(email).uid
+
+    def is_email_not_used(self, email):
+        try:
+            auth.get_user_by_email(email)
+            return True
+        except auth.UserNotFoundError:
+            return False
 
     def delete_user_by_id(self, id):
         auth.delete_user(id)

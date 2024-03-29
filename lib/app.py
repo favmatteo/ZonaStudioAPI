@@ -1,10 +1,23 @@
 from fastapi import FastAPI
 import mysql.connector
+from fastapi.middleware.cors import CORSMiddleware
 
 
 class Api:
     def __init__(self):
         self.app = FastAPI()
+        self.app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],  # Consente richieste da qualsiasi origine
+            allow_credentials=True,
+            allow_methods=[
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+            ],  # Puoi specificare i metodi consentiti
+            allow_headers=["*"],  # Consente tutti gli header nelle richieste
+        )
 
     def get_app(self):
         return self.app
@@ -24,7 +37,7 @@ class Database:
             password=password,
             database=database,
         )
-        self.cursor = self.conn.cursor()
+        self.cursor = self.conn.cursor(buffered=True)
 
     def execute(self, query: str):
         self.cursor.execute(query)
@@ -32,6 +45,9 @@ class Database:
 
     def get_content(self):
         return self.cursor.fetchall()
+    
+    def fetch_one(self):
+        return self.cursor.fetchone()
 
     def close(self):
         self.cursor.close()

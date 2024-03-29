@@ -13,11 +13,23 @@ from firebase_admin._auth_utils import UserNotFoundError
     description="Create new student",
 )
 async def create_student(student: StudentSignup):
+    if databases.student_db.is_username_not_used(username=student.username):
+        raise HTTPException(status_code=409, detail="Username already used")
+
+    if firebase.is_email_not_used(email=student.email):
+        raise HTTPException(status_code=409, detail="Email already used")
+
     user = firebase.create_user(
         student.name, student.surname, student.email, student.password
     )
     databases.student_db.create_new_student(
-        user.uid, student.name, student.surname, student.username, student.age
+        user.uid,
+        student.name,
+        student.surname,
+        student.username,
+        student.age,
+        student.school_class,
+        student.school_address,
     )
     return {"detail": f"Student '{student.username}' created"}
 
@@ -35,3 +47,13 @@ async def delete_student(id: str):
         return {"detail": f"Student deleted"}
     except UserNotFoundError as err:
         raise HTTPException(status_code=404, detail="User not found")
+
+
+@app.put(
+    "/update/student/{id}",
+    status_code=200,
+    name="Update a specific student",
+    description="Update specific characteristics student",
+)
+async def update_student(id: str, field: str, value):
+    databases.student_db.update_student_info(id, field, value)
