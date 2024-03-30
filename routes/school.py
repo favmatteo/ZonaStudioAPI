@@ -11,6 +11,7 @@ from firebase_admin._auth_utils import UserNotFoundError
     status_code=200,
     name="Get all school addresses",
     description="Get school address like 'Scientifico', 'Classico', 'Informatica', etc",
+    tags=["School"],
 )
 async def get_school_addresses():
     return {
