@@ -45,7 +45,7 @@ class Database:
 
     def get_content(self):
         return self.cursor.fetchall()
-    
+
     def fetch_one(self):
         return self.cursor.fetchone()
 

@@ -13,4 +13,4 @@ def is_username_not_used(username: str) -> bool:
     """
     database.execute(query)
     result2 = database.fetch_one()
-    return result1[0] != 0 and result2[0] != 0
+    return result1[0] != 0 or result2[0] != 0

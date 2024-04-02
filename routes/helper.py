@@ -20,7 +20,6 @@ async def create_student(helper: HelperSignup):
 
     if firebase.is_email_not_used(email=helper.email):
         raise HTTPException(status_code=409, detail="Email already used")
-
     user = firebase.create_user(
         helper.name, helper.surname, helper.email, helper.password
     )
