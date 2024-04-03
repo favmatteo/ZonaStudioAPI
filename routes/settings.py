@@ -1,6 +1,6 @@
 from fastapi import HTTPException, Request
 from lib.app import app
-from schemas.student import StudentSignup
+from schemas.token import TokenData
 from databases.firebase.firebase import firebase
 import databases.student_db
 import databases.user_db
@@ -34,3 +34,15 @@ async def get_firebase_settings(request: Request):
         raise HTTPException(
             status_code=500, detail="Generic Error! Please contact the admin!"
         )
+
+
+@app.post(
+    "/is-token-valid/",
+    status_code=200,
+    tags=["Settings"],
+)
+async def is_token_valid(token: TokenData):
+    if firebase.is_valid_token(token.token):
+        return {"status": 200}
+    else:
+        raise HTTPException(status_code=500, detail="Invalid Token!")

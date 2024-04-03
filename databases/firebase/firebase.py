@@ -35,6 +35,13 @@ class Firebase:
 
     def get_user_id_by_email(self, email):
         return self.get_user_by_email(email).uid
+    
+    def is_valid_token(self, token):
+        try:
+            decoded_token = auth.verify_id_token(token)
+            return True
+        except Exception as e:
+            return False
 
     def is_email_not_used(self, email):
         try:
