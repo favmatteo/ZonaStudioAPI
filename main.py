@@ -1,2 +1,2 @@
 from lib.app import app
-import routes.student, routes.school, routes.helper, routes.settings
+import routes.user, routes.school, routes.helper, routes.settings, routes.helps

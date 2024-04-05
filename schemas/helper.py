@@ -25,3 +25,7 @@ class HelperSignup(BaseModel):
     school_address: str | None = Field(title="Helpers's school address")
     school_class: int | None = Field(title="Helpers's school class", ge=1, le=5)
     educational_level: EducationalLevel = Field(title="Educational level")
+
+
+class HelperEmail(BaseModel):
+    email: EmailStr = Field(title="Helpers's email", max_length=120)

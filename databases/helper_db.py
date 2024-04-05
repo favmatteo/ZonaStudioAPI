@@ -24,3 +24,12 @@ def create_new_helper(
     VALUES ('{id_student}', '{name}', '{surname}', '{username}', {age}, 0, 0, {school_class}, {school_address_id}, '{educational_level.value}')
     """
     database.execute(query)
+
+
+def is_user_a_helper(uid: str) -> bool:
+    query = f"""
+    SELECT COUNT(*) FROM Helper WHERE id_helper = '{uid}'
+    """
+    database.execute(query)
+    result = database.fetch_one()
+    return result[0] == 1

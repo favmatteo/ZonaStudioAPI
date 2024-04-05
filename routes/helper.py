@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from lib.app import app
-from schemas.helper import HelperSignup
+from schemas.helper import HelperSignup, HelperEmail
 from databases.firebase.firebase import firebase
 import databases.helper_db
 import databases.user_db
@@ -34,3 +34,19 @@ async def create_student(helper: HelperSignup):
         helper.educational_level,
     )
     return {"detail": f"Helper '{helper.username}' created"}
+
+
+@app.get(
+    "/is-helper/",
+    status_code=200,
+    name="Is a user an Helper",
+    description="Check if user is an helper",
+    tags=["Helper"],
+)
+async def is_helper(email: str):
+    print(email)
+    if not firebase.is_email_not_used(email):
+        raise HTTPException(status_code=404, detail="Email doesn't exists")
+    uid = firebase.get_user_id_by_email(email)
+    detail = databases.helper_db.is_user_a_helper(uid)
+    return {"status": 200, "is_helper": detail}
