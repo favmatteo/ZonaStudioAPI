@@ -19,17 +19,32 @@ def create_new_helper(
         school_address_id = get_id_by_school_address(school_address=school_address)
     if school_class == None:
         school_class = "null"
-    query = f"""
+    query = """
     INSERT INTO Helper (id_helper, name, surname, username, age, eur, diamonds, class, id_schoolAddress, educationalLevel)
-    VALUES ('{id_student}', '{name}', '{surname}', '{username}', {age}, 0, 0, {school_class}, {school_address_id}, '{educational_level.value}')
+    VALUES (%s, %s, %s, %s, %s, 0, 0, %s, %s, %s)
     """
-    database.execute(query)
+
+    database.cursor.execute(
+        query,
+        (
+            id_student,
+            name,
+            surname,
+            username,
+            age,
+            school_class,
+            school_address_id,
+            educational_level.value,
+        ),
+    )
+    database.conn.commit()
 
 
 def is_user_a_helper(uid: str) -> bool:
-    query = f"""
-    SELECT COUNT(*) FROM Helper WHERE id_helper = '{uid}'
+    query = """
+    SELECT COUNT(*) FROM Helper WHERE id_helper = %s
     """
-    database.execute(query)
+    database.cursor.execute(query, (uid,))
+    database.conn.commit()
     result = database.fetch_one()
     return result[0] == 1

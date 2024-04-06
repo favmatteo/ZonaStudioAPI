@@ -1,10 +1,11 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, Request
 from lib.app import app
 from schemas.helper import HelperSignup, HelperEmail
 from databases.firebase.firebase import firebase
 import databases.helper_db
 import databases.user_db
 from firebase_admin._auth_utils import UserNotFoundError
+from lib.utils import get_authorization_header
 
 
 @app.post(
@@ -43,8 +44,12 @@ async def create_student(helper: HelperSignup):
     description="Check if user is an helper",
     tags=["Helper"],
 )
-async def is_helper(email: str):
-    print(email)
+async def is_helper(request: Request):
+    token = get_authorization_header(request)
+    if token is None or not firebase.is_valid_token(token):
+        raise HTTPException(status_code=500, detail="Invalid Token!")
+    uid = firebase.get_uid_from_token(token)
+    email = firebase.get_user_by_id(uid).email
     if not firebase.is_email_not_used(email):
         raise HTTPException(status_code=404, detail="Email doesn't exists")
     uid = firebase.get_user_id_by_email(email)

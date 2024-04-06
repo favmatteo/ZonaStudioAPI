@@ -7,7 +7,10 @@ def get_all_school_address() -> list:
 
 
 def get_id_by_school_address(school_address) -> int:
-    database.execute(
-        f"SELECT id_schoolAddress FROM SchoolAddress WHERE SchoolAddress = '{school_address}'"
-    )
-    return database.get_content()[0][0]
+    query = "SELECT id_schoolAddress FROM SchoolAddress WHERE SchoolAddress = %s"
+    database.cursor.execute(query, (school_address,))
+    result = database.cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        return None

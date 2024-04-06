@@ -1,5 +1,4 @@
-fastapi
-uvicorn[standard]
+fastapi[all]
 mysql-connector-python
 firebase-admin
 httpx
