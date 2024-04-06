@@ -46,3 +46,15 @@ async def is_token_valid(token: TokenData):
         return {"status": 200}
     else:
         raise HTTPException(status_code=500, detail="Invalid Token!")
+
+
+@app.get(
+    "/get-uid-from-token/",
+    status_code=200,
+    tags=["Settings"],
+)
+async def get_uid_from_token(token: str):
+    if not firebase.is_valid_token(token):
+        raise HTTPException(status_code=500, detail="Invalid Token!")
+    else:
+        return {"status": 200, "uid": firebase.get_uid_from_token(token)}
