@@ -18,10 +18,18 @@ def create_free_post(
 
 def get_all_post_of_a_user(uid: str):
     query = """
-    SELECT title, description
+    SELECT *
     FROM FreePost
     WHERE id_student = %s
     """
     database.cursor.execute(query, (uid,))
     posts = database.cursor.fetchall()
     return posts
+
+
+def get_free_post(id: int):
+    query = f"SELECT * FROM FreePost WHERE id_post = {id}"
+    database.execute(query)
+    free_post = database.fetch_one()
+
+    return free_post

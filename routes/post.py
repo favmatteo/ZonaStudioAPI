@@ -33,3 +33,12 @@ async def get_all_my_post(request: Request):
         raise HTTPException(status_code=500, detail="Invalid Token!")
     uid = firebase.get_uid_from_token(token)
     return {"status": "200", "posts": databases.post_db.get_all_post_of_a_user(uid)}
+
+
+@app.get("/get/free-post/{id}", status_code=200)
+async def get_free_post(id: int):
+    post = databases.post_db.get_free_post(id)
+    if post:
+        return post
+    else:
+        raise HTTPException(status_code=404, detail="Post doesn't exist!")

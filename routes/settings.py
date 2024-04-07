@@ -77,3 +77,4 @@ async def get_name_by_token(request: Request):
             )
         else:
             return {"status": 200, "name": name}
+
