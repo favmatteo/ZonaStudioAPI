@@ -30,16 +30,14 @@ async def create_comment_on_free_post(request: Request, comment: Comment):
         )
 
 
-@app.get("/get/comment-on-free_post/{id_post}", status_code=200)
+@app.get("/get/comment-on-free-post/{id_post}", status_code=200)
 async def get_comment_on_free_post(id_post: int):
     comment = databases.comment_db.get_comment_on_freepost(id_post)
     if comment:
         for i, c in enumerate(comment):
             c = [el for el in c]
-            print(c)
-            print(databases.user_db.get_nickname_by_uid(c[2]))
-            # username = "".join(databases.user_db.get_nickname_by_uid(c[2]))
-            # c.append(username)
+            username = "".join(databases.user_db.get_nickname_by_uid(c[2]))
+            c.append(username)
             comment[i] = c
         return {"status": 200, "comments": comment}
     else:

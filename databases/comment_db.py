@@ -19,7 +19,7 @@ def create_comment_on_freepost(
 
 
 def get_comment_on_freepost(id: int):
-    query = """SELECT * FROM Comment WHERE id_freePost = (%s)"""
+    query = """SELECT * FROM Comment WHERE id_freePost = (%s) ORDER BY date ASC"""
     database.cursor.execute(query, (id,))
     result = database.cursor.fetchall()
     return result
