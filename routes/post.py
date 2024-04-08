@@ -65,3 +65,8 @@ async def get_free_post(id: int):
         return post
     else:
         raise HTTPException(status_code=404, detail="Post doesn't exist!")
+
+
+@app.put("/close/free-post/{id}", status_code=201)
+async def close_free_post(id: int):
+    databases.post_db.close_free_post(id)

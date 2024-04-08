@@ -27,7 +27,7 @@ class Database:
     def __init__(
         self,
         database: str,
-        host: str = "192.168.1.123",
+        host: str = "localhost",
         user: str = "admin",
         password: str = "admin",
     ):

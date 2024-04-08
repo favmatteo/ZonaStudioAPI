@@ -3,6 +3,7 @@ from databases.school_address_db import get_id_by_school_address
 
 
 def create_tag(tag: str):
+    tag = tag.lower()
     query = """
     INSERT INTO Tag (tag)
     SELECT %s

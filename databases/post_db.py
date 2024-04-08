@@ -52,3 +52,9 @@ def get_free_post(id: int):
     free_post = database.fetch_one()
 
     return free_post
+
+
+def close_free_post(id: int):
+    query = "UPDATE FreePost SET state = 'Closed' WHERE id_post = %s"
+    database.cursor.execute(query, (id,))
+    database.conn.commit()
