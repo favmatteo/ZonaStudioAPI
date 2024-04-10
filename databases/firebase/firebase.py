@@ -6,11 +6,30 @@ import os
 
 class Firebase:
     def __init__(self):
-        current_dir = os.path.dirname(__file__)
-        relative_path = "data.json"
-        credentials_path = os.path.join(current_dir, relative_path)
-        credentials = firebase_admin.credentials.Certificate(credentials_path)
-        self.app = firebase_admin.initialize_app(credentials)
+        credentials_dict = {
+            "type": os.getenv("type"),
+            "project_id": os.getenv("project_id"),
+            "private_key_id": os.getenv("private_key_id"),
+            "private_key": os.getenv("private_key").replace(
+                "\\n", "\n"
+            ),  # Replace escaped newlines with actual newlines
+            "client_email": os.getenv("client_email"),
+            "client_id": os.getenv("client_id"),
+            "auth_uri": os.getenv("auth_uri"),
+            "token_uri": os.getenv("token_uri"),
+            "auth_provider_x509_cert_url": os.getenv("auth_provider_x509_cert_url"),
+            "client_x509_cert_url": os.getenv("client_x509_cert_url"),
+            "universe_domain": os.getenv("universe_domain"),
+        }
+
+        try:
+            # Create a Firebase credentials object using the dictionary
+            cred = firebase_admin.credentials.Certificate(credentials_dict)
+
+            # Initialize the Firebase app with the credentials
+            self.app = firebase_admin.initialize_app(cred)
+        except Exception as e:
+            print("Error initializing Firebase app:", e)
 
     def create_user(self, name: str, surname: str, email: str, password: str):
         user = auth.create_user(

@@ -4,3 +4,4 @@ databases/firebase/data.json
 databases/firebase/application.json
 .pytest_cache
 routes/stripe.json
+lib/.env

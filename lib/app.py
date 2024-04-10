@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 import mysql.connector
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Api:

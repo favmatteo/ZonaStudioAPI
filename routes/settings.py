@@ -8,6 +8,10 @@ import json
 from lib.utils import get_authorization_header
 
 
+# Lista dei domini consentiti
+allowed_domains = [os.getenv("ALLOWED_DOMAIN"), "192.168.1.123"]
+
+
 @app.get(
     "/get/firebase-settings/",
     status_code=200,
@@ -16,18 +20,26 @@ from lib.utils import get_authorization_header
     tags=["Settings"],
 )
 async def get_firebase_settings(request: Request):
-    allowed_ip_addresses = {"127.0.0.1", "::1", "localhost"}
-    client_host = request.client.host
-    if client_host not in allowed_ip_addresses and False:
+    # Controlla se l'header Referer è presente nella richiesta
+    referer = request.headers.get("Referer")
+    if not referer:
+        raise HTTPException(status_code=403, detail="Access forbidden")
+
+    # Controlla se il dominio del Referer è tra quelli consentiti
+    valid_referer = any(domain in referer for domain in allowed_domains)
+    if not valid_referer:
         raise HTTPException(status_code=403, detail="Access forbidden")
 
     try:
-        current_dir = os.path.dirname(__file__)
-        relative_path = "../databases/firebase/application.json"
-        application_data_path = os.path.join(current_dir, relative_path)
-        with open(application_data_path, "r") as file:
-            file_content = file.read()
-            data = json.loads(file_content)
+        data = {
+            "apiKey": os.getenv("apiKey"),
+            "authDomain": os.getenv("authDomain"),
+            "projectId": os.getenv("projectId"),
+            "storageBucket": os.getenv("storageBucket"),
+            "messagingSenderId": os.getenv("messagingSenderId"),
+            "appId": os.getenv("appId"),
+            "measurementId": os.getenv("measurementId"),
+        }
         return {"detail": data}
     except Exception as e:
         raise HTTPException(

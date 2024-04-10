@@ -3,11 +3,9 @@ from fastapi.responses import RedirectResponse
 from lib.app import app
 import stripe
 import json
+import os
 
-with open("routes/stripe.json") as f:
-    data = f.read()
-data = json.loads(data)
-stripe.api_key = data["key"]
+stripe.api_key = os.getenv("stripe_key")
 DOMAIN = "http://127.0.0.1:5500/html/"
 
 
